@@ -95,8 +95,8 @@ TST TUBES MILESTONE 4/
 
 1.  **Clone Repository**
     ```bash
-    git clone https://github.com/KenzieRafa/Reservation-API.git
-    cd Reservation-API
+    git clone https://github.com/KenzieRafa/TST-Reservation-API.git
+    cd TST-Reservation-API
     ```
 
 2.  **Create Virtual Environment (Optional but Recommended)**
