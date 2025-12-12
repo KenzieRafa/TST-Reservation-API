@@ -183,7 +183,7 @@ Aplikasi ini sudah dikonfigurasi (`railway.json`, `Procfile`) untuk deployment o
 4.  Pilih repository ini.
 5.  Klik **Deploy Now**.
 6.  Railway akan otomatis membaca config dan melakukan build.
-7.  Setelah sukses, kamu akan mendapatkan domain (contoh: `https://reservation-api-production.up.railway.app`).
+7.  **Selesai!** Aplikasi dapat diakses langsung di: **[https://tst-reservation.up.railway.app](https://tst-reservation.up.railway.app)**
 
 **Environment Variables (Optional di Railway):**
 - `SECRET_KEY`: Kunci rahasia untuk JWT (auto-generated jika tidak diisi).
