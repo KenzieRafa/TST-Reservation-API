@@ -685,4 +685,4 @@ def _waitlist_to_response(entry) -> WaitlistResponse:
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
