@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, Union
 from jose import jwt
 from passlib.context import CryptContext
@@ -9,14 +9,19 @@ SECRET_KEY = "your-secret-key-keep-it-secret"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    # bcrypt 4.x compatibility: explicitly handle password length
+    bcrypt__ident="2b"
+)
 
 def _prepare_password(password: str) -> str:
     """
     Prepare password for bcrypt to handle strings > 72 bytes.
-    If len > 72, hash with SHA256 first (returns 64 hex chars, safe).
-    Wait, bcrypt max is 72 bytes. SHA256 hex digest is 64 chars (bytes).
-    Safe.
+    bcrypt has a 72-byte password limit. If password is longer,
+    we pre-hash it with SHA256 to get a safe length string.
+    SHA256 hex digest is 64 chars (64 bytes in UTF-8).
     """
     password_bytes = password.encode('utf-8')
     if len(password_bytes) > 72:
@@ -37,10 +42,10 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     """Create JWT access token"""
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
