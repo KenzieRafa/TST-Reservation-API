@@ -1,0 +1,22 @@
+[run]
+source = .
+omit =
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */.pytest_cache/*
+    */htmlcov/*
+    */generate_hash.py
+    */hash_output.txt
+    Reservation.py
+    analyze_test_coverage.py
+
+[report]
+precision = 2
+show_missing = True
+skip_covered = False
+
+[html]
+directory = htmlcov

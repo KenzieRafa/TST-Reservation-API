@@ -1,0 +1,980 @@
+{
+  "info": {
+    "name": "Hotel Reservation API - DDD Implementation (COMPLETE)",
+    "description": "Complete API testing for ALL 33 endpoints - Reservation (12), Availability (7), Waitlist (11) + Quick Reference",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "AUTH (Login First)",
+      "item": [
+        {
+          "name": "Login (Get Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('access_token', jsonData.access_token);",
+                  "    console.log('Token updated');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "admin123",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "token"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "RESERVATIONS (12 endpoints)",
+      "item": [
+        {
+          "name": "1. Create Reservation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('reservation_id', jsonData.reservation_id);",
+                  "    pm.collectionVariables.set('confirmation_code', jsonData.confirmation_code);",
+                  "    console.log('✓ Reservation created');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guest_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"room_type_id\": \"DELUXE_001\",\n  \"check_in\": \"2025-12-15\",\n  \"check_out\": \"2025-12-17\",\n  \"adults\": 2,\n  \"children\": 1,\n  \"reservation_source\": \"WEBSITE\",\n  \"special_requests\": [\n    {\n      \"type\": \"EARLY_CHECK_IN\",\n      \"description\": \"Early check-in\"\n    }\n  ],\n  \"created_by\": \"TEST_USER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/reservations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Get All Reservations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/reservations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Get Reservation by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. Get by Confirmation Code",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/code/{{confirmation_code}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "code",
+                "{{confirmation_code}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Get Guest Reservations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/guest/123e4567-e89b-12d3-a456-426614174000",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "guest",
+                "123e4567-e89b-12d3-a456-426614174000"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Modify Reservation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"check_out\": \"2025-11-23\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7. Add Special Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"request_type\": \"EXTRA_BED\", \"description\": \"Extra bed\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}/special-requests",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}",
+                "special-requests"
+              ]
+            }
+          }
+        },
+        {
+          "name": "8. Confirm Reservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"payment_confirmed\": true}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}/confirm",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}",
+                "confirm"
+              ]
+            }
+          }
+        },
+        {
+          "name": "9. Check-In Guest",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"room_number\": \"301\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}/check-in",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}",
+                "check-in"
+              ]
+            }
+          }
+        },
+        {
+          "name": "10. Check-Out Guest",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}/check-out",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}",
+                "check-out"
+              ]
+            }
+          }
+        },
+        {
+          "name": "11. Cancel Reservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reason\": \"Changed plans\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}/cancel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}",
+                "cancel"
+              ]
+            }
+          }
+        },
+        {
+          "name": "12. Mark No-Show",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8000/api/reservations/{{reservation_id}}/no-show",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "{{reservation_id}}",
+                "no-show"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AVAILABILITY (7 endpoints)",
+      "item": [
+        {
+          "name": "1. Create Availability",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"room_type_id\": \"DELUXE_001\", \"availability_date\": \"2025-11-20\", \"total_rooms\": 10, \"overbooking_threshold\": 2}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/availability",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "availability"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Get Availability",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/availability/DELUXE_001/2025-11-20",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "availability",
+                "DELUXE_001",
+                "2025-11-20"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Check Availability",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"room_type_id\": \"DELUXE_001\", \"start_date\": \"2025-11-20\", \"end_date\": \"2025-11-22\", \"required_count\": 2}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/availability/check",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "availability",
+                "check"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. Reserve Rooms",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"room_type_id\": \"DELUXE_001\", \"start_date\": \"2025-11-20\", \"end_date\": \"2025-11-22\", \"count\": 2}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/availability/reserve",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "availability",
+                "reserve"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Release Rooms",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"room_type_id\": \"DELUXE_001\", \"start_date\": \"2025-11-20\", \"end_date\": \"2025-11-22\", \"count\": 1}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/availability/release",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "availability",
+                "release"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Block Rooms",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"room_type_id\": \"DELUXE_001\", \"start_date\": \"2025-11-20\", \"end_date\": \"2025-11-22\", \"count\": 1, \"reason\": \"Maintenance\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/availability/block",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "availability",
+                "block"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7. Unblock Rooms",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"room_type_id\": \"DELUXE_001\", \"start_date\": \"2025-11-20\", \"end_date\": \"2025-11-22\", \"count\": 1}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/availability/unblock",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "availability",
+                "unblock"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "WAITLIST (11 endpoints)",
+      "item": [
+        {
+          "name": "1. Add to Waitlist",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('waitlist_id', jsonData.waitlist_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"guest_id\": \"223e4567-e89b-12d3-a456-426614174000\", \"room_type_id\": \"DELUXE_001\", \"check_in\": \"2025-11-25\", \"check_out\": \"2025-11-27\", \"adults\": 2, \"children\": 0, \"priority\": \"2\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Get All Active Waitlist",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/active",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "active"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. Get Guest Waitlist",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/guest/223e4567-e89b-12d3-a456-426614174000",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "guest",
+                "223e4567-e89b-12d3-a456-426614174000"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. Get Room Waitlist (by Priority)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/room/DELUXE_001",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "room",
+                "DELUXE_001"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Get Waitlist Entry by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/{{waitlist_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "{{waitlist_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Convert to Reservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reservation_id\": \"{{reservation_id}}\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/{{waitlist_id}}/convert",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "{{waitlist_id}}",
+                "convert"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7. Mark as Notified",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/{{waitlist_id}}/notify",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "{{waitlist_id}}",
+                "notify"
+              ]
+            }
+          }
+        },
+        {
+          "name": "8. Upgrade Priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"new_priority\": \"3\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/{{waitlist_id}}/upgrade-priority",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "{{waitlist_id}}",
+                "upgrade-priority"
+              ]
+            }
+          }
+        },
+        {
+          "name": "9. Extend Expiry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"additional_days\": 7}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/{{waitlist_id}}/extend",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "{{waitlist_id}}",
+                "extend"
+              ]
+            }
+          }
+        },
+        {
+          "name": "10. Expire Entry",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/{{waitlist_id}}/expire",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "{{waitlist_id}}",
+                "expire"
+              ]
+            }
+          }
+        },
+        {
+          "name": "11. Get Entries Pending Notification",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/waitlist/notify/pending",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "waitlist",
+                "notify",
+                "pending"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ENUM REFERENCE",
+      "item": [
+        {
+          "name": "Priority (Waitlist): 1=LOW, 2=MEDIUM, 3=HIGH, 4=URGENT",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "RequestType: EARLY_CHECK_IN, LATE_CHECK_OUT, HIGH_FLOOR, ACCESSIBLE_ROOM, QUIET_ROOM, CRIBS, EXTRA_BED, SPECIAL_AMENITIES",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "BookingSource: WEBSITE, MOBILE_APP, PHONE, OTA, DIRECT, CORPORATE",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "ReservationStatus: PENDING, CONFIRMED, CHECKED_IN, CHECKED_OUT, CANCELLED, NO_SHOW",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "WaitlistStatus: ACTIVE, CONVERTED, EXPIRED, CANCELLED",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8000/api/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "reservation_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "waitlist_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "confirmation_code",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
