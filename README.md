@@ -121,9 +121,9 @@ TST TUBES MILESTONE 4/
 ```bash
 python main.py
 ```
-Server akan berjalan di `http://0.0.0.0:8000`.
-- **Swagger Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Health Check**: [http://localhost:8000/api/health](http://localhost:8000/api/health)
+Server akan berjalan di `http://0.0.0.0:8001`.
+- **Swagger Docs**: [http://localhost:8001/docs](http://localhost:8001/docs)
+- **Health Check**: [http://localhost:8001/api/health](http://localhost:8001/api/health)
 
 ### Method 2: Development Mode (Auto-reload)
 ```bash
@@ -155,8 +155,8 @@ Kamu bisa menjalankan aplikasi ini dalam container Docker tanpa perlu setup Pyth
 # Build Image
 docker build -t reservation-api .
 
-# Run Container (Port 8000 dimapping ke 8000)
-docker run -p 8000:8000 --name my-hotel-api reservation-api
+# Run Container (Port 8001 dimapping ke 8001)
+docker run -p 8001:8001 --name my-hotel-api reservation-api
 ```
 
 ### 2. Menggunakan Docker Compose (Recommended)
@@ -168,7 +168,7 @@ docker-compose up -d
 docker-compose down
 ```
 
-Akses API tetap sama di `http://localhost:8000`.
+Akses API tetap sama di `http://localhost:8001`.
 
 ---
 
