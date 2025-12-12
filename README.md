@@ -1,6 +1,5 @@
 # Hotel Reservation API - Domain-Driven Design Implementation
 
-![CI/CD Pipeline](https://github.com/KenzieRafa/Reservation-API/actions/workflows/ci.yml/badge.svg)
 ![Python Version](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1+-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
