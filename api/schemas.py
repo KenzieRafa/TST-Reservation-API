@@ -216,3 +216,5 @@ class UserResponse(BaseModel):
     email: Optional[str] = None
     full_name: Optional[str] = None
     disabled: bool
+
+# Force CI update
