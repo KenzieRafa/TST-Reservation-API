@@ -17,3 +17,4 @@ class User(BaseModel):
 class UserInDB(User):
     """User with hashed password for DB storage"""
     hashed_password: str
+# Force CI update

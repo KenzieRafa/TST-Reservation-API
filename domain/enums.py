@@ -43,3 +43,6 @@ class Priority(int, Enum):
     MEDIUM = 2
     HIGH = 3
     URGENT = 4
+
+
+# Force CI update

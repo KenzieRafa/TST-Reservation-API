@@ -137,3 +137,5 @@ class InMemoryWaitlistRepository(WaitlistRepository):
             del self._storage[waitlist_id]
             return True
         return False
+
+# Force CI update

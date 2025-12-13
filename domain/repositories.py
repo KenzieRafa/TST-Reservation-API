@@ -117,3 +117,6 @@ class WaitlistRepository(ABC):
     async def delete(self, waitlist_id: UUID) -> bool:
         """Delete waitlist entry"""
         pass
+
+
+# Force CI update

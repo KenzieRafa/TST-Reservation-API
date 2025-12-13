@@ -74,3 +74,6 @@ class SpecialRequest(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# Force CI update

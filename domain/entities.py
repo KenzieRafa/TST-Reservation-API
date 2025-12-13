@@ -522,3 +522,5 @@ class WaitlistEntry(BaseModel):
     def is_expired(self) -> bool:
         """Check if entry is expired"""
         return datetime.utcnow() > self.expires_at and self.status == WaitlistStatus.ACTIVE
+
+# Force CI update
