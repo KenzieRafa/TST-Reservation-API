@@ -474,3 +474,5 @@ class WaitlistService:
         """Get waitlist entries that need notification"""
         entries = await self.repository.find_all_active()
         return [e for e in entries if e.should_notify_again()]
+
+# Force CI update
