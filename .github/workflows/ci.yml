@@ -89,8 +89,8 @@ jobs:
 
     - name: Test health endpoint
       run: |
-        curl -f http://localhost:8001/api/health || exit 1
+        curl -f http://localhost:8000/api/health || exit 1
 
     - name: Test API documentation
       run: |
-        curl -f http://localhost:8001/docs || exit 1
+        curl -f http://localhost:8000/docs || exit 1
