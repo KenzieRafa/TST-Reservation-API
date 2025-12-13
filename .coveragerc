@@ -20,3 +20,4 @@ skip_covered = False
 
 [html]
 directory = htmlcov
+
